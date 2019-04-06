@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 
 import screenAlike.AppData;
 import screenAlike.ForegroundServiceHandler;
+import screenAlike.HttpServer;
 import screenAlike.ImageGenerator;
 
 public class ScreenAlike extends Application {
@@ -17,16 +18,17 @@ public class ScreenAlike extends Application {
     private ImageGenerator mImageGenerator;
     private MediaProjection mMediaProjection;
     private MediaProjectionManager mMediaProjectionManager;
-//    private ForegroundServiceHandler mForegroundServiceTaskHandler;
+    private HttpServer mHttpServer;
     @Override
     public void onCreate() {
         super.onCreate();
         sAppInstance = this;
         mAppData = new AppData(this);
+        getAppData().initIndexHtmlPage(this);
+        mHttpServer = new HttpServer();
         mImageGenerator = new ImageGenerator();
         mMediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        getAppData().initIndexHtmlPage(this);
-
+        mHttpServer.start();
      }
 
     public static AppData getAppData() {

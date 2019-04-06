@@ -27,15 +27,15 @@ public class screenHelper {
         mSeverPort = Integer.parseInt(mSharedPreferences.getString(mContext.getString(R.string.pref_key_server_port), DEFAULT_SERVER_PORT));
     }
 
-    public String getServerAddress() {
-        return "http:/" + getIpAddress() + ":" + mSeverPort;
-    }
-
-    public String getIpAddress() {
-        WifiManager wm = (WifiManager) mContext.getApplicationContext().getSystemService(WIFI_SERVICE);
-        String ipInt = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-        return ipInt;
-    }
+//    public String getServerAddress() {
+//        return "http:/" + getIpAddress() + ":" + mSeverPort;
+//    }
+//
+//    public String getIpAddress() {
+//        WifiManager wm = (WifiManager) mContext.getApplicationContext().getSystemService(WIFI_SERVICE);
+//        String ipInt = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+//        return ipInt;
+//    }
 
 
 

@@ -14,6 +14,7 @@ import screenAlike.ForegroundServiceHandler;
 import screenAlike.screenHelper;
 import android.os.Process;
 
+import static com.example.screenalike.ScreenAlike.getAppData;
 import static com.example.screenalike.ScreenAlike.getProjectionManager;
 import static com.example.screenalike.ScreenAlike.setMediaProjection;
 
@@ -34,7 +35,7 @@ private static MainActivity sAppInstance;
         setContentView(R.layout.activity_main);
         mscreenHelper = new screenHelper(this);
        TextView myAwesomeTextView = (TextView)findViewById(R.id.editText);
-        myAwesomeTextView.setText(mscreenHelper.getServerAddress());
+        myAwesomeTextView.setText(getAppData().getServerAddress());
         ToggleButton toggle = (ToggleButton) findViewById(R.id.btn_start_stream);
                 mHandlerThread = new HandlerThread(
                 ScreenAlike.class.getSimpleName(),

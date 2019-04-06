@@ -1,9 +1,12 @@
 package screenAlike;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.wifi.WifiManager;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
@@ -19,6 +22,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import static android.content.Context.WIFI_SERVICE;
 //import java.util.concurrent.ConcurrentLinkedQueue;
 
 //
@@ -37,13 +43,17 @@ public final class AppData {
 //    private final String mPinRequestHtmlPage;
 //    private final String mPinRequestErrorMsg;
     private final byte[] mIconBytes;
-
+    private int mClients;
     private final ConcurrentLinkedDeque<byte[]> mImageQueue = new ConcurrentLinkedDeque<>();
-   // private final ConcurrentLinkedQueue<Client> mClientQueue = new ConcurrentLinkedQueue<>();
-
+    private final ConcurrentLinkedQueue<Client> mClientQueue = new ConcurrentLinkedQueue<>();
+    private volatile int mClientTimeout;
+    private static final String DEFAULT_CLIENT_TIMEOUT = "3000";
     private volatile boolean isActivityRunning;
     private volatile boolean isStreamRunning;
-
+    private final Context mContext;
+    private final SharedPreferences mSharedPreferences;
+    private volatile int mServerPort;
+    private String DEFAULT_SERVER_PORT = "8080";
     public AppData(final Context context) {
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mWifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -52,6 +62,11 @@ public final class AppData {
        // mPinRequestHtmlPage = getPinRequestHtmlPage(context);
 //        mPinRequestErrorMsg = context.getString(R.string.html_wrong_pin);
         mIconBytes = getFavicon(context);
+        mContext = context;
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mServerPort = Integer.parseInt(mSharedPreferences.getString(mContext.getString(R.string.pref_key_server_port), DEFAULT_SERVER_PORT));
+        mClientTimeout = Integer.parseInt(mSharedPreferences.getString(mContext.getString(R.string.pref_key_client_con_timeout), DEFAULT_CLIENT_TIMEOUT));
+
     }
 
     public void setActivityRunning(final boolean activityRunning) {
@@ -67,9 +82,9 @@ public final class AppData {
         return mImageQueue;
     }
 
-//    public ConcurrentLinkedQueue<Client> getClientQueue() {
-//        return mClientQueue;
-//    }
+    public ConcurrentLinkedQueue<Client> getClientQueue() {
+        return mClientQueue;
+    }
 
     public boolean isActivityRunning() {
         return isActivityRunning;
@@ -115,7 +130,9 @@ public final class AppData {
     public byte[] getIcon() {
         return mIconBytes;
     }
-
+    public void setClients(final int clients) {
+        mClients = clients;
+    }
     @Nullable
     public InetAddress getIpAddress() {
         try {
@@ -131,9 +148,29 @@ public final class AppData {
         return null;
     }
 
+
+    public int getServerPort(){
+        return mServerPort;
+    }
+
+    public String getServerAddress() {
+        return "http:/" + getIpAddress() + ":" + getServerPort();
+    }
+
+    public int getClientTimeout() {
+        return mClientTimeout;
+    }
+
 //    public String getServerAddress() {
-//        return "http:/" + getIpAddress() + ":" + ScreenStreamApplication.getAppPreference().getSeverPort();
+//        return "http:/" + getIpAddress() + ":" + getServerPort();
 //    }
+//
+//    public String getIpAddress() {
+//        WifiManager wm = (WifiManager) mContext.getApplicationContext().getSystemService(WIFI_SERVICE);
+//        String ipInt = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+//        return ipInt;
+//    }
+
 
     public boolean isWiFiConnected() {
         return mWifiManager.getConnectionInfo().getIpAddress() != 0;
