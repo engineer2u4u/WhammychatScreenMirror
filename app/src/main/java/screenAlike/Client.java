@@ -1,7 +1,5 @@
 package screenAlike;
 
-//import com.google.firebase.crash.FirebaseCrash;
-
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
@@ -37,7 +35,6 @@ final class Client {
             mOtputStreamWriter.close();
             mClientSocket.close();
         } catch (IOException e) {
-           // FirebaseCrash.report(e);
         }
 
     }

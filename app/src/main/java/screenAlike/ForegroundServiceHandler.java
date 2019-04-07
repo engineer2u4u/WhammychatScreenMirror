@@ -53,7 +53,6 @@ public final class ForegroundServiceHandler extends Handler {
                 sendMessageDelayed(obtainMessage(HANDLER_DETECT_ROTATION), 250);
                 break;
             case HANDLER_STOP_STREAMING:
-//                if (!getAppData().isStreamRunning()) break;
                 removeMessages(HANDLER_DETECT_ROTATION);
                 removeMessages(HANDLER_STOP_STREAMING);
                 imageGenerator = getImageGenerator();
@@ -73,7 +72,6 @@ public final class ForegroundServiceHandler extends Handler {
                 obtainMessage(HANDLER_PAUSE_STREAMING).sendToTarget();
                 break;
             default:
-               // FirebaseCrash.log("Cannot handle message");
         }
     }
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import screenAlike.ForegroundServiceHandler;
+import screenAlike.NotifyImageGenerator;
 import screenAlike.screenHelper;
 import android.os.Process;
 
@@ -27,7 +28,7 @@ private static MainActivity sAppInstance;
     private ForegroundServiceHandler mForegroundServiceTaskHandler;
         private HandlerThread mHandlerThread;
     private boolean buttonClicked = false;
-
+    private NotifyImageGenerator mNotifyImageGenerator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sAppInstance = this;
@@ -63,8 +64,9 @@ private static MainActivity sAppInstance;
         super.onPause();
         if(!buttonClicked)
         {
-
             mForegroundServiceTaskHandler.obtainMessage(ForegroundServiceHandler.HANDLER_STOP_STREAMING).sendToTarget();
+            mNotifyImageGenerator = new NotifyImageGenerator(getApplicationContext());
+            mNotifyImageGenerator.addDefaultScreen();
             ToggleButton toggle = (ToggleButton) findViewById(R.id.btn_start_stream);
             toggle.setChecked(false);
         }
@@ -86,10 +88,9 @@ private static MainActivity sAppInstance;
                 final MediaProjection mediaProjection = projectionManager.getMediaProjection(resultCode, data);
                 if (mediaProjection == null) return;
                 setMediaProjection(mediaProjection);
-                ScreenAlike.getAppData();
+                mForegroundServiceTaskHandler.obtainMessage(ForegroundServiceHandler.HANDLER_START_STREAMING).sendToTarget();
                 break;
             default:
-                //FirebaseCrash.log("Unknown  Deepak's error request code: " + requestCode);
         }
     }
 

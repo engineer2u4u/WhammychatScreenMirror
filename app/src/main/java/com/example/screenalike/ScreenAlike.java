@@ -4,16 +4,14 @@ import android.app.Application;
 import android.content.Context;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
-//import android.os.HandlerThread;
 import android.support.annotation.Nullable;
-
 import screenAlike.AppData;
-import screenAlike.ForegroundServiceHandler;
 import screenAlike.HttpServer;
 import screenAlike.ImageGenerator;
 
 public class ScreenAlike extends Application {
     private static ScreenAlike sAppInstance;
+    private MediaProjection.Callback mProjectionCallback;
     private AppData mAppData;
     private ImageGenerator mImageGenerator;
     private MediaProjection mMediaProjection;
@@ -30,6 +28,12 @@ public class ScreenAlike extends Application {
         mMediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         mHttpServer.start();
      }
+
+
+
+    public void onDestroy() {
+        mHttpServer.stop(null);
+    }
 
     public static AppData getAppData() {
         return sAppInstance.mAppData;
@@ -51,5 +55,4 @@ public class ScreenAlike extends Application {
     public static MediaProjectionManager getProjectionManager() {
         return sAppInstance == null ? null : sAppInstance.mMediaProjectionManager;
     }
-
 }

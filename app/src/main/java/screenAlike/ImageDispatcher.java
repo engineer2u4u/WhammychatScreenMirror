@@ -1,13 +1,9 @@
 package screenAlike;
 
-//import com.google.firebase.crash.FirebaseCrash;
-
 import java.io.IOException;
 import java.net.Socket;
 
 import static com.example.screenalike.ScreenAlike.getAppData;
-//import static info.dvkr.screenstream.ScreenStreamApplication.getAppData;
-//import static info.dvkr.screenstream.ScreenStreamApplication.getMainActivityViewModel;
 
 final class ImageDispatcher {
     private final Object mLock = new Object();
@@ -62,7 +58,6 @@ final class ImageDispatcher {
                 getAppData().getClientQueue().add(newClient);
                 getAppData().setClients(getAppData().getClientQueue().size());
             } catch (IOException e) {
-                //FirebaseCrash.report(e);
             }
         }
     }
