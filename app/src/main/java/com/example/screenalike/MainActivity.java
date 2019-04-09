@@ -22,6 +22,7 @@ import static com.example.screenalike.ScreenAlike.setMediaProjection;
 
 public class MainActivity extends AppCompatActivity {
 private screenHelper mscreenHelper;
+
 private static MainActivity sAppInstance;
     private static final int REQUEST_CODE_SETTINGS = 2;
     private static final int REQUEST_CODE_SCREEN_CAPTURE = 1;
